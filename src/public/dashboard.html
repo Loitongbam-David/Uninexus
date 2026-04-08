@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniNexus - Dashboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        dark: '#0f172a',
+                        darker: '#0b0f19',
+                        sidebar: '#1e293b',
+                        surface: '#334155'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-darker text-gray-200 h-screen overflow-hidden flex font-sans default-bg">
+
+    <!-- Sidebar: Server/Channel Navigation -->
+    <aside class="w-72 bg-sidebar border-r border-gray-800 flex flex-col h-full z-20 shrink-0 shadow-lg">
+        <!-- Brand Header -->
+        <div class="h-16 flex items-center px-6 border-b border-gray-800 shrink-0 bg-sidebar/50 backdrop-blur-md z-10">
+            <h2 class="font-bold text-xl text-white tracking-wide"><i class="fa-solid fa-layer-group text-primary mr-2"></i> Nexus Pods</h2>
+        </div>
+        
+        <!-- Channels List -->
+        <div class="flex-1 overflow-y-auto w-full custom-scrollbar py-4 px-3 space-y-6">
+            
+            <!-- Global Pods -->
+            <div>
+                <div class="flex items-center justify-between px-3 mb-2">
+                    <h3 class="text-xs uppercase font-semibold text-gray-500 tracking-wider">Public Hubs</h3>
+                    <button class="create-hub-btn text-gray-500 hover:text-white transition group" data-type="public" title="Create Public Hub">
+                        <i class="fa-solid fa-plus text-xs group-hover:scale-110 transform"></i>
+                    </button>
+                </div>
+                <ul id="public-channels" class="space-y-1">
+                    <li class="px-3 text-xs text-gray-600">Loading channels...</li>
+                </ul>
+            </div>
+
+            <!-- Private Pods -->
+            <div>
+                <div class="flex items-center justify-between px-3 mb-2">
+                    <h3 class="text-xs uppercase font-semibold text-gray-500 tracking-wider">Private Study</h3>
+                    <button class="create-hub-btn text-gray-500 hover:text-white transition group" data-type="private" title="Create Private Group">
+                        <i class="fa-solid fa-plus text-xs group-hover:scale-110 transform"></i>
+                    </button>
+                </div>
+                <ul id="private-channels" class="space-y-1">
+                    <!-- Dynamic -->
+                </ul>
+            </div>
+        </div>
+
+        <!-- User Profile Footer -->
+        <div class="h-16 bg-gray-900/60 border-t border-gray-800 flex items-center justify-between px-4 shrink-0 transition hover:bg-gray-800/80 cursor-default">
+            <div class="flex items-center gap-3 overflow-hidden">
+                <img id="user-avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=fallback" alt="Avatar" class="w-9 h-9 rounded-full bg-gray-700 shrink-0 border border-gray-600">
+                <div class="truncate">
+                    <div id="user-name" class="text-sm font-semibold text-gray-100 truncate">Loading...</div>
+                    <div id="user-email" class="text-xs text-gray-400 truncate">...@cuchd.in</div>
+                </div>
+            </div>
+            <button id="logout-btn" class="text-gray-400 hover:text-red-400 p-2 rounded-md transition" title="Logout">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Chat Area -->
+    <main class="flex-1 flex flex-col h-full relative" id="drop-zone">
+        <!-- Drag & Drop Overlay (Hidden default) -->
+        <div id="drag-overlay" class="absolute inset-0 bg-primary/20 backdrop-blur-md z-50 hidden flex-col items-center justify-center border-4 border-dashed border-primary m-4 rounded-xl transition-all">
+            <i class="fa-solid fa-cloud-arrow-up text-7xl text-primary drop-shadow-lg mb-4 animate-bounce"></i>
+            <h2 class="text-3xl font-bold text-white drop-shadow-md">Drop file to upload to vault</h2>
+            <p class="text-primary-100 mt-2 font-medium">Any PDF or Image (Max 10MB)</p>
+        </div>
+
+        <!-- Header -->
+        <header class="h-16 flex items-center justify-between px-6 border-b border-gray-800 shrink-0 bg-darker/80 backdrop-blur-md z-10 shadow-sm relative">
+            <div class="flex items-center">
+                <span class="text-gray-500 text-2xl mr-2 font-light" id="header-icon">#</span>
+                <h1 class="font-bold text-lg text-white tracking-wide mr-4">CS301-Algorithms</h1>
+                <!-- Dynamic Invite Button -->
+                <button id="header-invite-btn" class="hidden bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded-md transition shadow-md flex items-center gap-2">
+                    <i class="fa-solid fa-user-plus"></i> Invite Access
+                </button>
+            </div>
+            
+            <!-- Contextual Search Bar -->
+            <div class="relative w-64 lg:w-72">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm"></i>
+                <input type="text" id="chat-search" placeholder="Search notes or messages..." class="w-full bg-gray-900 border border-gray-700 text-sm rounded-md py-1.5 pl-9 pr-4 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-gray-200 transition placeholder-gray-600 shadow-inner">
+            </div>
+        </header>
+
+        <!-- Messages Container -->
+        <div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar flex flex-col" id="chat-messages">
+            <!-- Messages dynamically populated by JS (Phase 4) -->
+        </div>
+
+        <!-- Input Area Footer -->
+        <div class="p-4 bg-darker shrink-0 pt-0">
+            <div class="bg-gray-800 rounded-lg flex flex-col focus-within:ring-1 focus-within:ring-primary focus-within:border-primary border border-gray-700 transition shadow-inner">
+                <form id="message-form" class="flex items-center px-4 py-3">
+                    <button type="button" id="upload-trigger-btn" class="text-gray-400 hover:text-gray-200 transition shrink-0 mr-2" title="Upload File (PDF/Image)">
+                        <div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center hover:bg-primary hover:text-white transition shadow">
+                            <i class="fa-solid fa-plus"></i>
+                        </div>
+                    </button>
+                    <button type="button" id="sandbox-trigger-btn" class="text-indigo-400 hover:text-indigo-300 transition shrink-0 mr-3" title="Start Live Code Sandbox">
+                        <div class="w-8 h-8 rounded-full bg-gray-700/50 flex items-center justify-center hover:bg-gray-700 transition shadow border border-gray-600/50">
+                            <i class="fa-solid fa-code"></i>
+                        </div>
+                    </button>
+                    <input type="text" id="message-input" autocomplete="off" placeholder="Message Channel" class="flex-1 bg-transparent text-gray-200 focus:outline-none placeholder-gray-500 md:text-sm">
+                    <button type="submit" class="ml-2 text-primary hover:text-indigo-400 transition transform hover:scale-110" title="Send message">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </form>
+                <!-- Hidden file input linked to plus wrapper logic -->
+                <input type="file" id="hidden-file-input" class="hidden" accept=".pdf,.png,.jpg,.jpeg">
+            </div>
+            
+            <!-- Upload Progress UI (Hidden via JS normally) -->
+            <div id="upload-progress-container" class="hidden mt-3 p-3 bg-gray-800/80 rounded-lg border border-gray-700 flex items-center gap-3 backdrop-blur-sm">
+                <i class="fa-solid fa-file-arrow-up text-indigo-400 text-xl shrink-0 animate-pulse"></i>
+                <div class="flex-1">
+                    <div class="flex justify-between text-xs mb-1.5">
+                        <span id="upload-filename" class="text-gray-300 font-medium truncate w-48">Uploading Document...</span>
+                        <span id="upload-percentage" class="text-primary font-bold">0%</span>
+                    </div>
+                    <div class="w-full bg-gray-900 rounded-full h-1.5 overflow-hidden">
+                        <div id="upload-bar" class="bg-primary h-1.5 rounded-full transition-all duration-300 ease-out shadow-[0_0_10px_rgba(99,102,241,0.5)]" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Create Hub Modal (Hidden by default) -->
+    <div id="create-hub-modal" class="hidden absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-gray-800 border border-gray-700 rounded-xl p-6 w-full max-w-sm shadow-2xl relative animate-fade-in">
+            <h2 class="text-xl font-bold text-white mb-4">Create New Pod</h2>
+            <form id="create-hub-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm text-gray-300 mb-1">Pod Name</label>
+                    <input type="text" id="hub-name" required placeholder="e.g. CS301-Algorithms" class="w-full bg-gray-900 border border-gray-700 text-white rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary transition placeholder-gray-600">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-300 mb-1">Visibility Type</label>
+                    <select id="hub-type" class="w-full bg-gray-900 border border-gray-700 text-white rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary">
+                        <option value="public">Public (Everyone)</option>
+                        <option value="private">Private (Invite Only)</option>
+                    </select>
+                </div>
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" id="cancel-hub" class="px-4 py-2 text-sm text-gray-400 hover:text-white transition">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-primary hover:bg-indigo-500 text-white text-sm rounded shadow transition shadow-indigo-500/30">Create Hub</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Invite Member Modal (Hidden by default) -->
+    <div id="invite-modal" class="hidden absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-gray-800 border border-gray-700 rounded-xl p-6 w-full max-w-sm shadow-2xl relative animate-fade-in">
+            <h2 class="text-xl font-bold text-white mb-4">Invite Scholar to Pod</h2>
+            <form id="invite-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm text-gray-300 mb-1">Scholar's @cuchd.in Email</label>
+                    <input type="email" id="invite-email" required placeholder="target@cuchd.in" class="w-full bg-gray-900 border border-gray-700 text-white rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary transition placeholder-gray-600">
+                </div>
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" id="cancel-invite" class="px-4 py-2 text-sm text-gray-400 hover:text-white transition">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-primary hover:bg-indigo-500 text-white text-sm rounded shadow transition shadow-indigo-500/30">Send Invite</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sandbox Modal -->
+    <div id="sandbox-modal" class="hidden absolute inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-gray-800 border border-gray-700 rounded-xl p-6 w-full max-w-sm shadow-2xl relative animate-fade-in">
+            <h2 class="text-xl font-bold text-white mb-4">Launch Remote Sandbox</h2>
+            <form id="sandbox-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm text-gray-300 mb-1">Select Compiler Stack</label>
+                    <select id="sandbox-language" class="w-full bg-gray-900 border border-gray-700 text-white rounded p-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary">
+                        <option value="c">C Compiler (GCC)</option>
+                        <option value="cpp">C++ Compiler (G++)</option>
+                        <option value="python">Python 3 Execution engine</option>
+                        <option value="js">Vanilla JavaScript Runtime</option>
+                        <option value="react">React.js Web Engine</option>
+                    </select>
+                </div>
+                <div class="flex mt-6">
+                    <button type="button" id="cancel-sandbox" class="px-4 py-2 text-sm text-gray-400 hover:text-white transition mr-3">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm rounded shadow transition shadow-indigo-500/30 flex-1 font-semibold text-center block" style="width:100%;">Create Live Environment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- App Logic Scripts (Phase 4) -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/chat.js"></script>
+    <script src="js/upload.js"></script>
+
+</body>
+</html>

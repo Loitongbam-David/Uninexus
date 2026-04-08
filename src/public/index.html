@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniNexus - Secure Academic Hub</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        dark: '#0f172a',
+                        darker: '#0b0f19',
+                        panel: 'rgba(30, 41, 59, 0.7)',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-darker text-gray-100 min-h-screen flex items-center justify-center font-sans default-bg relative overflow-hidden">
+    
+    <!-- Background Orbs -->
+    <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-primary rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+
+    <main class="glass-panel rounded-2xl shadow-2xl p-8 w-full max-w-md relative z-10 mx-4 border border-gray-700">
+        <div class="text-center mb-8">
+            <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-500/50">
+                <i class="fa-solid fa-graduation-cap text-2xl text-white"></i>
+            </div>
+            <h1 class="text-3xl font-bold text-white tracking-tight">UniNexus</h1>
+            <p class="text-gray-400 mt-2 text-sm">The exclusive academic sanctuary.</p>
+        </div>
+
+        <div id="alert-box" class="hidden mb-4 p-3 rounded text-sm text-center"></div>
+
+        <!-- Forms Container -->
+        <div id="auth-container">
+            <!-- Login Form -->
+            <form id="login-form" class="space-y-5 flex flex-col transition-all duration-300">
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-1">University Email</label>
+                    <input type="email" id="login-email" required placeholder="student@cuchd.in" 
+                        class="w-full bg-gray-800/50 border border-gray-600 text-white rounded-lg p-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder-gray-500 transition">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-1">Password</label>
+                    <input type="password" id="login-password" required placeholder="••••••••" 
+                        class="w-full bg-gray-800/50 border border-gray-600 text-white rounded-lg p-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder-gray-500 transition">
+                </div>
+                <button type="submit" class="w-full bg-primary hover:bg-indigo-500 text-white font-semibold py-3 rounded-lg transition shadow-lg shadow-indigo-500/30 flex justify-center items-center gap-2">
+                    <span>Enter Hub</span> <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                </button>
+                <div class="text-center mt-4">
+                    <p class="text-sm text-gray-400">New here? <a href="#" id="show-register" class="text-primary hover:text-indigo-400 font-medium transition cursor-pointer">Request Access</a></p>
+                </div>
+            </form>
+
+            <!-- Register Form (Hidden by default) -->
+            <form id="register-form" class="space-y-5 hidden flex-col transition-all duration-300">
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-1">Username</label>
+                    <input type="text" id="reg-username" required placeholder="Scholar" 
+                        class="w-full bg-gray-800/50 border border-gray-600 text-white rounded-lg p-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder-gray-500 transition">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-1">University Email</label>
+                    <input type="email" id="reg-email" required placeholder="student@cuchd.in" 
+                        class="w-full bg-gray-800/50 border border-gray-600 text-white rounded-lg p-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder-gray-500 transition">
+                    <p class="text-xs text-gray-500 mt-1"><i class="fa-solid fa-lock text-gray-600 pr-1"></i> Strictly restricted to @cuchd.in domain</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-1">Password</label>
+                    <input type="password" id="reg-password" required placeholder="••••••••" 
+                        class="w-full bg-gray-800/50 border border-gray-600 text-white rounded-lg p-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder-gray-500 transition">
+                </div>
+                <button type="submit" class="w-full bg-primary hover:bg-indigo-500 text-white font-semibold py-3 rounded-lg transition shadow-lg shadow-indigo-500/30">
+                    Create Account
+                </button>
+                <div class="text-center mt-4">
+                    <p class="text-sm text-gray-400">Already a member? <a href="#" id="show-login" class="text-primary hover:text-indigo-400 font-medium transition cursor-pointer">Login</a></p>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Client-side logic Phase 4 will be linked below -->
+    <script src="js/auth.js"></script>
+</body>
+</html>
